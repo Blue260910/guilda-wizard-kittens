@@ -1,0 +1,11 @@
+title = "Regras da Guilda"
+
+[extend]
+useDefault = true
+
+[[rules]]
+id = "holocron-token"
+description = "Token de acesso ao Holocron, credencial interna da Guilda"
+regex = '''holocron_(live|test)_[0-9a-f]{24}'''
+keywords = ["holocron"]
+tags = ["guilda", "token"]
