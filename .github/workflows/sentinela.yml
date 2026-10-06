@@ -1,0 +1,46 @@
+name: Sentinela da Guilda
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  sast:
+    name: Semgrep (SAST)
+    runs-on: ubuntu-latest
+    container:
+      image: semgrep/semgrep
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Varredura Semgrep
+        run: semgrep scan --config=auto --json --output=semgrep.json
+
+      - name: Guardar relatório
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: relatorio-semgrep
+          path: semgrep.json
+
+  segredos:
+    name: Gitleaks (segredos)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Varredura Gitleaks
+        run: |
+          docker run --rm -v "$PWD:/repo" zricethezav/gitleaks:latest \
+            git /repo --config /repo/.gitleaks.toml \
+            --report-path /repo/gitleaks.json --exit-code 1
+
+      - name: Guardar relatório
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: relatorio-gitleaks
+          path: gitleaks.json
