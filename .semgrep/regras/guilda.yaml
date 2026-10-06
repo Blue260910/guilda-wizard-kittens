@@ -1,0 +1,22 @@
+rules:
+  - id: guilda-proibe-eval
+    languages: [python]
+    severity: ERROR
+    message: Uso de eval detectado. A Guilda proíbe eval em qualquer contexto.
+    pattern: eval(...)
+
+  - id: guilda-segredo-fixo
+    languages: [python, javascript]
+    severity: WARNING
+    message: Variável com cara de segredo recebendo valor fixo no código.
+    patterns:
+      - pattern: $VAR = "..."
+      - metavariable-regex:
+          metavariable: $VAR
+          regex: (?i).*(senha|password|token|secret|api_key|segredo|chave).*
+
+  - id: guilda-shell-true
+    languages: [python]
+    severity: ERROR
+    message: subprocess com shell=True permite injeção de comando.
+    pattern: subprocess.$FUNC(..., shell=True, ...)
