@@ -1,13 +1,12 @@
 const express = require("express");
 const crypto = require("crypto");
-const { exec } = require("child_process");
 const jwt = require("jsonwebtoken");
 
 const app = express();
 const SEGREDO_JWT = "alohomora";
 
 app.get("/feitiço", (req, res) => {
-  exec("echo " + req.query.nome, (erro, saída) => res.send(saída));
+  res.type("text/plain").send(String(req.query.nome));
 });
 
 app.get("/senha", (req, res) => {
