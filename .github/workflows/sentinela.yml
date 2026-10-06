@@ -17,6 +17,9 @@ jobs:
       - name: Varredura Semgrep
         run: semgrep scan --config=auto --json --output=semgrep.json
 
+      - name: Bloqueio de severidade ERROR
+        run: semgrep scan --config=auto --severity=ERROR --error
+
       - name: Guardar relatório
         if: always()
         uses: actions/upload-artifact@v4
